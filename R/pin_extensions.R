@@ -91,7 +91,7 @@ board_pin_store <- function(board, path, name, description, type, metadata, extr
     ui_viewer_updated(board)
   }
 
-  pin_get(name, board$name, ...) %>%
+  pin_get(name, board$name, cache = FALSE, ...) %>%
     invisible_maybe()
 }
 

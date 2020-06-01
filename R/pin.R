@@ -136,7 +136,7 @@ pin_get <- function(name,
     if (is.null(result) && is.null(board)) {
       for (board_name in board_list()) {
         if (!cache) pin_reset_cache(board_name, name)
-        result <- board_pin_get_or_null(board_get(board_name), name, extract = extract, version = version)
+        result <- board_pin_get_or_null(board_get(board_name), name, extract = extract, version = version, cache = cache, ...)
         if (!is.null(result)) {
           pin_log("Found pin ", name, " in board ", board_name)
           break
@@ -147,7 +147,7 @@ pin_get <- function(name,
   }
   else {
     if (!cache) pin_reset_cache(board, name)
-    result <- board_pin_get(board_get(board), name, extract = extract, version = version, ...)
+    result <- board_pin_get(board_get(board), name, extract = extract, version = version, cache = cache, ...)
   }
 
   manifest <- pin_manifest_get(result)

@@ -86,13 +86,13 @@ datatxt_pin_download_info <- function(board, name, ...) {
   )
 }
 
-datatxt_refresh_manifest <- function(board, name, ...) {
+datatxt_refresh_manifest <- function(board, name, cache = TRUE, ...) {
   pin_info <- datatxt_pin_download_info(board, name, ...)
   path_guess <- pin_info$path_guess
   index_entry <- pin_info$index_entry
 
   download_path <- file.path(path_guess, "data.txt")
-  pin_download(download_path, name, board$name, can_fail = TRUE, headers = board_datatxt_headers(board, download_path))
+  pin_download(download_path, name, board$name, can_fail = TRUE, cache = cache, headers = board_datatxt_headers(board, download_path))
 
   list(
     path_guess = path_guess,
@@ -101,8 +101,8 @@ datatxt_refresh_manifest <- function(board, name, ...) {
   )
 }
 
-board_pin_get.datatxt <- function(board, name, extract = NULL, version = NULL, ...) {
-  manifest_paths <- datatxt_refresh_manifest(board, name, ...)
+board_pin_get.datatxt <- function(board, name, extract = NULL, cache = TRUE, version = NULL, ...) {
+  manifest_paths <- datatxt_refresh_manifest(board, name, cache = cache, ...)
   path_guess <- manifest_paths$path_guess
   index_entry <- manifest_paths$index_entry
   download_path <- manifest_paths$download_path
@@ -121,6 +121,7 @@ board_pin_get.datatxt <- function(board, name, extract = NULL, version = NULL, .
                  name,
                  board$name,
                  can_fail = TRUE,
+                 cache = cache,
                  headers = board_datatxt_headers(board, download_path),
                  subpath = file.path(name, version))
     manifest <- pin_manifest_get(local_path)
@@ -159,6 +160,7 @@ board_pin_get.datatxt <- function(board, name, extract = NULL, version = NULL, .
     local_path <- pin_download(path,
                                name,
                                board$name,
+                               cache = cache,
                                extract = identical(extract, TRUE),
                                headers = board_datatxt_headers(board, path))
   }
